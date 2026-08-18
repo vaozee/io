@@ -151,15 +151,14 @@
 
   /* ---------- header / nav (floating, transparent) ---------- */
   header{
-    position:fixed; top:78px; left:0; right:0; z-index:70;
-    display:flex; justify-content:center; pointer-events:none;
+    position:sticky; top:0; z-index:70;
+    display:flex; justify-content:center;
+    padding:12px 0;
   }
-  @media (max-width:700px){ header{ top:70px; } }
   header nav{
     display:flex; justify-content:center; gap:2px;
     padding:8px 8px; flex-wrap:wrap;
-    pointer-events:auto;
-    background:rgba(4,10,7,0.42);
+    background:rgba(4,10,7,0.5);
     backdrop-filter:blur(16px) saturate(140%);
     -webkit-backdrop-filter:blur(16px) saturate(140%);
     border:1px solid var(--border);
@@ -182,11 +181,10 @@
 
   /* ---------- hero ---------- */
   .hero{
-    max-width:1000px; margin:0 auto; padding:126px 20px 30px;
+    max-width:1000px; margin:0 auto; padding:56px 20px 30px;
     text-align:center;
     position:relative;
   }
-  @media (max-width:700px){ .hero{ padding-top:116px; } }
   .hero .ghost-bg{
     position:absolute; inset:0; z-index:-1; overflow:hidden; pointer-events:none;
     display:flex; align-items:center; justify-content:center;
@@ -429,6 +427,65 @@
     .rec-indicator .dot, .ticker-track, .glitch::before, .glitch::after,
     .static-flash, .card:hover::after{ animation:none !important; }
   }
+
+  /* ---------- fullscreen app embed modal ---------- */
+  .app-modal{
+    position:fixed; inset:0; z-index:200;
+    background:var(--bg);
+    opacity:0; pointer-events:none;
+    transition:opacity .22s ease;
+  }
+  .app-modal.open{ opacity:1; pointer-events:auto; }
+  .app-modal iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0; background:#0a0a0a;
+  }
+
+  .app-capsule{
+    position:absolute; top:16px; left:50%; transform:translateX(-50%);
+    z-index:5;
+    display:flex; align-items:center; gap:8px;
+    padding:6px 8px;
+    background:rgba(6,14,9,0.38);
+    backdrop-filter:blur(20px) saturate(160%);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);
+    border:1px solid var(--border);
+    border-radius:999px;
+    box-shadow:0 16px 40px -16px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.04);
+    max-width:calc(100vw - 24px);
+    user-select:none;
+  }
+  .app-capsule .drag-handle{
+    cursor:grab; color:var(--ink-dimmer); font-size:0.85rem; letter-spacing:-1px;
+    padding:6px 8px 6px 10px; line-height:1; touch-action:none;
+  }
+  .app-capsule .drag-handle:active{ cursor:grabbing; }
+  .app-capsule .drag-handle:hover{ color:var(--phos-dim); }
+  .app-capsule .led{
+    width:7px; height:7px; border-radius:50%; background:var(--phos); flex:none;
+    box-shadow:0 0 8px 1px var(--phos); animation:blink 1.6s ease-in-out infinite;
+  }
+  .app-capsule .name{
+    font-family:'JetBrains Mono', monospace; font-size:0.7rem; letter-spacing:0.04em;
+    color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    max-width:38vw; padding-right:2px;
+  }
+  .app-capsule .icon-btn{
+    display:flex; align-items:center; justify-content:center; flex:none;
+    width:26px; height:26px; border-radius:50%;
+    color:var(--ink-dim); border:1px solid var(--border); background:rgba(0,0,0,0.15);
+    font-size:0.7rem; cursor:pointer; text-decoration:none;
+    transition:all .15s ease;
+  }
+  .app-capsule .icon-btn:hover, .app-capsule .icon-btn:focus-visible{
+    color:var(--phos); border-color:var(--phos-dim); background:var(--phos-faint); outline:none;
+  }
+  .app-capsule .icon-btn.close{ color:var(--red); border-color:var(--red-dim); }
+  .app-capsule .icon-btn.close:hover, .app-capsule .icon-btn.close:focus-visible{
+    color:var(--red); border-color:var(--red); background:rgba(255,59,59,0.12);
+  }
+  @media (max-width:560px){
+    .app-capsule .name{ max-width:32vw; }
+  }
 </style>
 </head>
 <body>
@@ -494,55 +551,55 @@
           <line class="radar-sweep-line" x1="250" y1="250" x2="250" y2="20"></line>
         </g>
 
-        <a class="blip-link" href="https://vaozee.github.io/sawit/" target="_blank" rel="noopener" aria-label="Buka Sawit Monitor">
+        <a class="blip-link" href="https://vaozee.github.io/sawit/" data-app="SYS-01 · SAWIT MONITOR" target="_blank" rel="noopener" aria-label="Buka Sawit Monitor">
           <circle class="hit" cx="250" cy="140" r="15"></circle>
           <circle class="ring" cx="250" cy="140" r="6"></circle>
           <circle class="core" cx="250" cy="140" r="4"></circle>
           <text x="258" y="138">SAWIT</text>
         </a>
-        <a class="blip-link" href="https://vaozee.github.io/wrp/" target="_blank" rel="noopener" aria-label="Buka War Room Plantation" style="animation-delay:.3s">
+        <a class="blip-link" href="https://vaozee.github.io/wrp/" data-app="SYS-02 · WAR ROOM PLANTATION" target="_blank" rel="noopener" aria-label="Buka War Room Plantation" style="animation-delay:.3s">
           <circle class="hit" cx="340" cy="180" r="15"></circle>
           <circle class="ring" cx="340" cy="180" r="6"></circle>
           <circle class="core" cx="340" cy="180" r="4" style="animation-delay:.3s"></circle>
           <text x="348" y="178">WRP</text>
         </a>
-        <a class="blip-link alert" href="https://vaozee.github.io/api/" target="_blank" rel="noopener" aria-label="Buka Pantau Titik Panas">
+        <a class="blip-link alert" href="https://vaozee.github.io/api/" data-app="SYS-03 · PANTAU TITIK PANAS" target="_blank" rel="noopener" aria-label="Buka Pantau Titik Panas">
           <circle class="hit" cx="180" cy="90" r="15"></circle>
           <circle class="ring" cx="180" cy="90" r="6"></circle>
           <circle class="core" cx="180" cy="90" r="4" style="animation-delay:.6s"></circle>
           <text x="188" y="88">API</text>
         </a>
-        <a class="blip-link alert" href="https://vaozee.github.io/air/" target="_blank" rel="noopener" aria-label="Buka Peta Potensi Air Tanah">
+        <a class="blip-link alert" href="https://vaozee.github.io/air/" data-app="SYS-04 · PETA POTENSI AIR TANAH" target="_blank" rel="noopener" aria-label="Buka Peta Potensi Air Tanah">
           <circle class="hit" cx="150" cy="200" r="15"></circle>
           <circle class="ring" cx="150" cy="200" r="6"></circle>
           <circle class="core" cx="150" cy="200" r="4" style="animation-delay:.9s"></circle>
           <text x="158" y="198">AIR</text>
         </a>
-        <a class="blip-link" href="https://vaozee.github.io/sus/" target="_blank" rel="noopener" aria-label="Buka KopSUS App">
+        <a class="blip-link" href="https://vaozee.github.io/sus/" data-app="SYS-05 · KOPSUS APP" target="_blank" rel="noopener" aria-label="Buka KopSUS App">
           <circle class="hit" cx="330" cy="90" r="15"></circle>
           <circle class="ring" cx="330" cy="90" r="6"></circle>
           <circle class="core" cx="330" cy="90" r="4" style="animation-delay:1.2s"></circle>
           <text x="338" y="88">SUS</text>
         </a>
-        <a class="blip-link" href="https://vaozee.github.io/promo/" target="_blank" rel="noopener" aria-label="Buka Suite Launcher">
+        <a class="blip-link" href="https://vaozee.github.io/promo/" data-app="SYS-06 · SUITE LAUNCHER" target="_blank" rel="noopener" aria-label="Buka Suite Launcher">
           <circle class="hit" cx="380" cy="260" r="15"></circle>
           <circle class="ring" cx="380" cy="260" r="6"></circle>
           <circle class="core" cx="380" cy="260" r="4" style="animation-delay:1.5s"></circle>
           <text x="360" y="278">PROMO</text>
         </a>
-        <a class="blip-link" href="https://vaozee.github.io/falak/" target="_blank" rel="noopener" aria-label="Buka Hisab Falakiyah">
+        <a class="blip-link" href="https://vaozee.github.io/falak/" data-app="PRJ-07 · HISAB FALAKIYAH" target="_blank" rel="noopener" aria-label="Buka Hisab Falakiyah">
           <circle class="hit" cx="120" cy="260" r="15"></circle>
           <circle class="ring" cx="120" cy="260" r="6"></circle>
           <circle class="core" cx="120" cy="260" r="4" style="animation-delay:1.8s"></circle>
           <text x="70" y="278">FALAK</text>
         </a>
-        <a class="blip-link" href="https://vaozee.github.io/waris/" target="_blank" rel="noopener" aria-label="Buka Kalkulator Ahli Waris">
+        <a class="blip-link" href="https://vaozee.github.io/waris/" data-app="PRJ-08 · KALKULATOR AHLI WARIS" target="_blank" rel="noopener" aria-label="Buka Kalkulator Ahli Waris">
           <circle class="hit" cx="220" cy="230" r="15"></circle>
           <circle class="ring" cx="220" cy="230" r="6"></circle>
           <circle class="core" cx="220" cy="230" r="4" style="animation-delay:2.1s"></circle>
           <text x="180" y="248">WARIS</text>
         </a>
-        <a class="blip-link alert" href="https://vaozee.github.io/pajak/" target="_blank" rel="noopener" aria-label="Buka Kalkulator Pajak Indonesia">
+        <a class="blip-link alert" href="https://vaozee.github.io/pajak/" data-app="PRJ-09 · KALKULATOR PAJAK INDONESIA" target="_blank" rel="noopener" aria-label="Buka Kalkulator Pajak Indonesia">
           <circle class="hit" cx="290" cy="220" r="15"></circle>
           <circle class="ring" cx="290" cy="220" r="6"></circle>
           <circle class="core" cx="290" cy="220" r="4" style="animation-delay:2.4s"></circle>
@@ -578,7 +635,7 @@
     </div>
     <div class="card-grid">
 
-      <a class="card online" href="https://vaozee.github.io/falak/" target="_blank" rel="noopener">
+      <a class="card online" href="https://vaozee.github.io/falak/" data-app="PRJ-07 · HISAB FALAKIYAH" target="_blank" rel="noopener">
         <div class="top"><span class="code">PRJ-07</span><span class="status"><span class="led"></span>online</span></div>
         <h3>Hisab Falakiyah</h3>
         <p>Kalender Hijriyah, awal bulan, imsakiyah, arah kiblat, dan simulasi orbit 3D matahari-bulan — hisab hakiki offline.</p>
@@ -586,7 +643,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card online" href="https://vaozee.github.io/waris/" target="_blank" rel="noopener">
+      <a class="card online" href="https://vaozee.github.io/waris/" data-app="PRJ-08 · KALKULATOR AHLI WARIS" target="_blank" rel="noopener">
         <div class="top"><span class="code">PRJ-08</span><span class="status"><span class="led"></span>online</span></div>
         <h3>Kalkulator Ahli Waris</h3>
         <p>Pembagian warisan Islam dengan fraksi eksak, mencakup kaidah 'Aul, Radd, Gharrawain, dan Akdariyyah.</p>
@@ -594,7 +651,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card alert" href="https://vaozee.github.io/pajak/" target="_blank" rel="noopener">
+      <a class="card alert" href="https://vaozee.github.io/pajak/" data-app="PRJ-09 · KALKULATOR PAJAK INDONESIA" target="_blank" rel="noopener">
         <div class="top"><span class="code">PRJ-09</span><span class="status"><span class="led"></span>online</span></div>
         <h3>Kalkulator Pajak Indonesia</h3>
         <p>PPh 21/23/25, PPN, BPHTB, cukai, bea meterai, PKB, dan lainnya — lengkap rujukan dasar hukum terkini.</p>
@@ -616,7 +673,7 @@
     </div>
     <div class="card-grid">
 
-      <a class="card online" href="https://vaozee.github.io/sawit/" target="_blank" rel="noopener">
+      <a class="card online" href="https://vaozee.github.io/sawit/" data-app="SYS-01 · SAWIT MONITOR" target="_blank" rel="noopener">
         <div class="top"><span class="code">SYS-01</span><span class="status"><span class="led"></span>online</span></div>
         <h3>Sawit Monitor</h3>
         <p>Dashboard utama — menyatukan produksi kebun, pabrik, gudang, SDM, dan keuangan dalam satu ekosistem offline-first.</p>
@@ -624,7 +681,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card online" href="https://vaozee.github.io/wrp/" target="_blank" rel="noopener">
+      <a class="card online" href="https://vaozee.github.io/wrp/" data-app="SYS-02 · WAR ROOM PLANTATION" target="_blank" rel="noopener">
         <div class="top"><span class="code">SYS-02</span><span class="status"><span class="led"></span>online</span></div>
         <h3>War Room Plantation</h3>
         <p>Monitoring produksi TBS per blok/afdeling, data PKS, perawatan, dan audit trail — tersambung ke Google Sheets.</p>
@@ -632,7 +689,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card live alert" href="https://vaozee.github.io/api/" target="_blank" rel="noopener">
+      <a class="card live alert" href="https://vaozee.github.io/api/" data-app="SYS-03 · PANTAU TITIK PANAS" target="_blank" rel="noopener">
         <div class="top"><span class="code">SYS-03</span><span class="status"><span class="led"></span>live feed</span></div>
         <h3>Pantau Titik Panas</h3>
         <p>Deteksi hotspot kebakaran real-time dari NASA FIRMS untuk grup perkebunan mitra, lengkap dengan peringatan suara.</p>
@@ -640,7 +697,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card online alert" href="https://vaozee.github.io/air/" target="_blank" rel="noopener">
+      <a class="card online alert" href="https://vaozee.github.io/air/" data-app="SYS-04 · PETA POTENSI AIR TANAH" target="_blank" rel="noopener">
         <div class="top"><span class="code">SYS-04</span><span class="status"><span class="led"></span>online</span></div>
         <h3>Peta Potensi Air Tanah</h3>
         <p>Skoring lokasi sumur bor berbasis elevasi, jarak sungai, dan curah hujan — untuk Katingan-Sampit &amp; Grobogan.</p>
@@ -648,7 +705,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card" href="https://vaozee.github.io/sus/" target="_blank" rel="noopener">
+      <a class="card" href="https://vaozee.github.io/sus/" data-app="SYS-05 · KOPSUS APP" target="_blank" rel="noopener">
         <div class="top"><span class="code">SYS-05</span><span class="status"><span class="led"></span>demo mode</span></div>
         <h3>KopSUS App</h3>
         <p>Manajemen koperasi karyawan — inventory, supplier, penjualan, pembayaran, dan simpanan anggota.</p>
@@ -656,7 +713,7 @@
         <span class="corner-br"></span>
       </a>
 
-      <a class="card online" href="https://vaozee.github.io/promo/" target="_blank" rel="noopener">
+      <a class="card online" href="https://vaozee.github.io/promo/" data-app="SYS-06 · SUITE LAUNCHER" target="_blank" rel="noopener">
         <div class="top"><span class="code">SYS-06</span><span class="status"><span class="led"></span>online</span></div>
         <h3>Suite Launcher</h3>
         <p>Satu pintu masuk untuk tujuh aplikasi desktop internal — kebun, HR, engineering, gudang, keuangan, pabrik, audit.</p>
@@ -672,6 +729,17 @@
     <span>vaozee.github.io // END OF INDEX</span>
   </footer>
 </main>
+
+<div class="app-modal" id="appModal" aria-hidden="true" role="dialog" aria-modal="true">
+  <iframe id="appModalFrame" src="about:blank" title="Modul aplikasi"></iframe>
+  <div class="app-capsule" id="appCapsule">
+    <span class="drag-handle" id="appDragHandle" title="Geser kapsul" aria-hidden="true">⠿⠿</span>
+    <span class="led" aria-hidden="true"></span>
+    <span class="name" id="appModalName">—</span>
+    <a class="icon-btn" id="appModalOpenTab" href="#" target="_blank" rel="noopener" title="Buka di tab baru" aria-label="Buka di tab baru">↗</a>
+    <button type="button" class="icon-btn close" id="appModalClose" title="Tutup (Esc)" aria-label="Tutup">✕</button>
+  </div>
+</div>
 
 <script>
   function tick(){
@@ -699,6 +767,95 @@
       }
     }, 5000);
   }
+
+  // ---- fullscreen app embed modal ----
+  const appModal = document.getElementById('appModal');
+  const appFrame = document.getElementById('appModalFrame');
+  const appName = document.getElementById('appModalName');
+  const appOpenTab = document.getElementById('appModalOpenTab');
+  const appClose = document.getElementById('appModalClose');
+  const appCapsule = document.getElementById('appCapsule');
+  const appDragHandle = document.getElementById('appDragHandle');
+  let lastFocused = null;
+
+  function resetCapsulePosition(){
+    appCapsule.style.left = '50%';
+    appCapsule.style.top = '16px';
+    appCapsule.style.transform = 'translateX(-50%)';
+  }
+
+  function openApp(url, label){
+    lastFocused = document.activeElement;
+    appFrame.src = url;
+    appName.textContent = label;
+    appName.title = url;
+    appOpenTab.href = url;
+    resetCapsulePosition();
+    appModal.classList.add('open');
+    appModal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    appClose.focus();
+  }
+  function closeApp(){
+    appModal.classList.remove('open');
+    appModal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    setTimeout(() => { appFrame.src = 'about:blank'; }, 250);
+    if(lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+  appClose.addEventListener('click', closeApp);
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && appModal.classList.contains('open')) closeApp();
+  });
+
+  document.querySelectorAll('[data-app]').forEach((el) => {
+    el.addEventListener('click', function(e){
+      // allow modifier-click / middle-click to fall back to native new-tab behavior
+      if(e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return;
+      e.preventDefault();
+      openApp(this.getAttribute('href'), this.dataset.app);
+    });
+  });
+
+  // ---- draggable capsule (mouse + touch) ----
+  (function(){
+    let dragging = false, offsetX = 0, offsetY = 0;
+
+    function start(e){
+      dragging = true;
+      const rect = appCapsule.getBoundingClientRect();
+      const p = e.touches ? e.touches[0] : e;
+      offsetX = p.clientX - rect.left;
+      offsetY = p.clientY - rect.top;
+      appCapsule.style.transform = 'none';
+      appCapsule.style.left = rect.left + 'px';
+      appCapsule.style.top = rect.top + 'px';
+      document.addEventListener('mousemove', move);
+      document.addEventListener('touchmove', move, {passive:false});
+      document.addEventListener('mouseup', stop);
+      document.addEventListener('touchend', stop);
+    }
+    function move(e){
+      if(!dragging) return;
+      if(e.cancelable) e.preventDefault();
+      const p = e.touches ? e.touches[0] : e;
+      const maxX = window.innerWidth - appCapsule.offsetWidth - 4;
+      const maxY = window.innerHeight - appCapsule.offsetHeight - 4;
+      const x = Math.min(Math.max(4, p.clientX - offsetX), maxX);
+      const y = Math.min(Math.max(4, p.clientY - offsetY), maxY);
+      appCapsule.style.left = x + 'px';
+      appCapsule.style.top = y + 'px';
+    }
+    function stop(){
+      dragging = false;
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('touchmove', move);
+      document.removeEventListener('mouseup', stop);
+      document.removeEventListener('touchend', stop);
+    }
+    appDragHandle.addEventListener('mousedown', start);
+    appDragHandle.addEventListener('touchstart', start, {passive:true});
+  })();
 </script>
 
 </body>
